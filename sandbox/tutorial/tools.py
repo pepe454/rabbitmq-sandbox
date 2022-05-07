@@ -9,6 +9,7 @@ connection_params = pika.ConnectionParameters(
     host="localhost",
     port=5672,
     credentials=credentials,
+    virtual_host="/tutorial"
 )
 
 

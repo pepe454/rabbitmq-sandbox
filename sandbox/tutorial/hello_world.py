@@ -1,20 +1,21 @@
 import argparse
 import threading
+from json import tool
 
-import pika_tools
+import tools
 
 TEST_QUEUE = "hello"
 DURABLE = False
 
 def producer():
-    channel = pika_tools.get_channel()
+    channel = tools.get_channel()
     channel.queue_declare(queue=TEST_QUEUE, durable=DURABLE)
     channel.basic_publish(exchange='', routing_key='hello', body='Hello World!')
     print(" [x] Sent 'Hello World!'")
-    pika_tools.close_channel(channel)
+    tools.close_channel(channel)
 
 def consumer():
-    channel = pika_tools.get_channel()
+    channel = tools.get_channel()
     channel.queue_declare(queue=TEST_QUEUE, durable=DURABLE)
 
     def callback(ch, method, properties, body):
@@ -41,7 +42,7 @@ if __name__ == "__main__":
         consumer_thread = threading.Thread(name="consumer-1", target=consumer)
         threads.append(consumer_thread)
 
-    # start and join
+    # start
     for t in threads:
         t.start()
 
